@@ -1,0 +1,541 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Class Assistant — AI Teaching Assistant</title>
+    <meta name="description" content="Personalized AI assistant for every student in your class. Adapts tasks to each student's level automatically.">
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        
+        :root {
+            --primary: #4F46E5;
+            --primary-dark: #3730A3;
+            --accent: #10B981;
+            --bg: #F8FAFC;
+            --text: #1E293B;
+            --text-light: #64748B;
+            --white: #FFFFFF;
+            --shadow: 0 4px 6px -1px rgba(0,0,0,0.1);
+            --shadow-lg: 0 10px 25px -5px rgba(0,0,0,0.1);
+        }
+        
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            color: var(--text);
+            background: var(--bg);
+            line-height: 1.6;
+        }
+
+        /* NAV */
+        nav {
+            background: var(--white);
+            padding: 1rem 2rem;
+            box-shadow: var(--shadow);
+            position: sticky;
+            top: 0;
+            z-index: 100;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        .logo { font-size: 1.5rem; font-weight: 700; }
+        .logo span { color: var(--primary); }
+        .nav-btn {
+            background: var(--primary);
+            color: white;
+            padding: 0.6rem 1.5rem;
+            border-radius: 8px;
+            text-decoration: none;
+            font-weight: 600;
+            transition: background 0.2s;
+        }
+        .nav-btn:hover { background: var(--primary-dark); }
+
+        /* HERO */
+        .hero {
+            max-width: 1100px;
+            margin: 0 auto;
+            padding: 5rem 2rem 3rem;
+            text-align: center;
+        }
+        .hero h1 {
+            font-size: 3rem;
+            line-height: 1.2;
+            margin-bottom: 1.5rem;
+        }
+        .hero h1 span { color: var(--primary); }
+        .hero p {
+            font-size: 1.25rem;
+            color: var(--text-light);
+            max-width: 700px;
+            margin: 0 auto 2rem;
+        }
+        .hero-cta {
+            display: inline-block;
+            background: var(--primary);
+            color: white;
+            padding: 1rem 2.5rem;
+            border-radius: 12px;
+            font-size: 1.2rem;
+            font-weight: 700;
+            text-decoration: none;
+            transition: all 0.2s;
+            box-shadow: var(--shadow-lg);
+        }
+        .hero-cta:hover { background: var(--primary-dark); transform: translateY(-2px); }
+        .hero-price {
+            margin-top: 1rem;
+            color: var(--text-light);
+            font-size: 0.95rem;
+        }
+
+        /* DEMO */
+        .demo {
+            max-width: 800px;
+            margin: 2rem auto 4rem;
+            background: #1E293B;
+            border-radius: 16px;
+            padding: 2rem;
+            box-shadow: var(--shadow-lg);
+            color: #E2E8F0;
+            font-family: 'Menlo', 'Consolas', monospace;
+            font-size: 0.9rem;
+            line-height: 1.8;
+        }
+        .demo .teacher { color: #60A5FA; }
+        .demo .arrow { color: #F59E0B; }
+        .demo .student { color: #34D399; }
+        .demo .name { color: #F472B6; font-weight: bold; }
+
+        /* FEATURES */
+        .features {
+            max-width: 1100px;
+            margin: 0 auto;
+            padding: 4rem 2rem;
+        }
+        .features h2 {
+            text-align: center;
+            font-size: 2rem;
+            margin-bottom: 3rem;
+        }
+        .feature-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 2rem;
+        }
+        .feature-card {
+            background: var(--white);
+            padding: 2rem;
+            border-radius: 16px;
+            box-shadow: var(--shadow);
+            transition: transform 0.2s;
+        }
+        .feature-card:hover { transform: translateY(-4px); }
+        .feature-icon { font-size: 2rem; margin-bottom: 1rem; }
+        .feature-card h3 { margin-bottom: 0.5rem; font-size: 1.2rem; }
+        .feature-card p { color: var(--text-light); }
+
+        /* HOW IT WORKS */
+        .how-it-works {
+            background: var(--white);
+            padding: 4rem 2rem;
+        }
+        .how-it-works h2 {
+            text-align: center;
+            font-size: 2rem;
+            margin-bottom: 3rem;
+        }
+        .steps {
+            max-width: 700px;
+            margin: 0 auto;
+        }
+        .step {
+            display: flex;
+            gap: 1.5rem;
+            margin-bottom: 2rem;
+            align-items: flex-start;
+        }
+        .step-num {
+            background: var(--primary);
+            color: white;
+            width: 48px;
+            height: 48px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 700;
+            font-size: 1.2rem;
+            flex-shrink: 0;
+        }
+        .step h3 { margin-bottom: 0.3rem; }
+        .step p { color: var(--text-light); }
+
+        /* PRIVACY */
+        .privacy {
+            max-width: 800px;
+            margin: 4rem auto;
+            padding: 3rem;
+            background: linear-gradient(135deg, #EEF2FF, #E0E7FF);
+            border-radius: 16px;
+            text-align: center;
+        }
+        .privacy h2 { font-size: 1.8rem; margin-bottom: 1rem; }
+        .privacy p { color: var(--text-light); font-size: 1.1rem; max-width: 600px; margin: 0 auto; }
+
+        /* PRICING */
+        .pricing {
+            padding: 4rem 2rem;
+            text-align: center;
+        }
+        .pricing h2 { font-size: 2rem; margin-bottom: 3rem; }
+        .price-card {
+            background: var(--white);
+            max-width: 400px;
+            margin: 0 auto;
+            padding: 3rem;
+            border-radius: 16px;
+            box-shadow: var(--shadow-lg);
+            border: 2px solid var(--primary);
+        }
+        .price-amount {
+            font-size: 3.5rem;
+            font-weight: 800;
+            color: var(--primary);
+        }
+        .price-period { color: var(--text-light); margin-bottom: 2rem; }
+        .price-features {
+            list-style: none;
+            text-align: left;
+            margin-bottom: 2rem;
+        }
+        .price-features li {
+            padding: 0.5rem 0;
+            border-bottom: 1px solid #E2E8F0;
+        }
+        .price-features li::before { content: "✅ "; }
+        .price-cta {
+            display: block;
+            background: var(--primary);
+            color: white;
+            padding: 1rem;
+            border-radius: 12px;
+            font-size: 1.1rem;
+            font-weight: 700;
+            text-decoration: none;
+            transition: background 0.2s;
+        }
+        .price-cta:hover { background: var(--primary-dark); }
+        .price-note {
+            margin-top: 1rem;
+            font-size: 0.85rem;
+            color: var(--text-light);
+        }
+
+        /* FAQ */
+        .faq {
+            max-width: 700px;
+            margin: 0 auto;
+            padding: 4rem 2rem;
+        }
+        .faq h2 { text-align: center; font-size: 2rem; margin-bottom: 2rem; }
+        .faq-item { margin-bottom: 1.5rem; }
+        .faq-item h3 {
+            cursor: pointer;
+            padding: 1rem;
+            background: var(--white);
+            border-radius: 8px;
+            box-shadow: var(--shadow);
+        }
+        .faq-item p {
+            padding: 1rem;
+            color: var(--text-light);
+        }
+
+        /* FOOTER */
+        footer {
+            text-align: center;
+            padding: 3rem 2rem;
+            color: var(--text-light);
+            border-top: 1px solid #E2E8F0;
+        }
+
+        /* LANG SWITCHER */
+        .lang-switch {
+            display: flex;
+            gap: 0.5rem;
+            align-items: center;
+        }
+        .lang-btn {
+            padding: 0.3rem 0.8rem;
+            border-radius: 6px;
+            cursor: pointer;
+            border: 1px solid #E2E8F0;
+            background: transparent;
+            font-size: 0.9rem;
+            transition: all 0.2s;
+        }
+        .lang-btn.active { background: var(--primary); color: white; border-color: var(--primary); }
+        
+
+        @media (max-width: 768px) {
+            .hero h1 { font-size: 2rem; }
+            .hero p { font-size: 1rem; }
+            .demo { font-size: 0.75rem; margin: 2rem 1rem; }
+            nav { padding: 0.8rem 1rem; }
+        }
+    </style>
+</head>
+<body>
+
+<nav>
+    <div class="logo">🎓 <span>Class</span> Assistant</div>
+    <div style="display:flex;gap:1rem;align-items:center">
+        <div class="lang-switch">
+            <button class="lang-btn active" onclick="setLang('en', this)">EN</button>
+            <button class="lang-btn" onclick="setLang('lt', this)">LT</button>
+        </div>
+        <a href="#pricing" class="nav-btn en">Get Started</a>
+        <a href="#pricing" class="nav-btn lt">Pradėti</a>
+    </div>
+</nav>
+
+<!-- HERO -->
+<section class="hero">
+    <h1 class="en">AI assistant that <span>knows every student</span> personally</h1>
+    <h1 class="lt">AI asistentas, kuris <span>pažįsta kiekvieną mokinį</span> asmeniškai</h1>
+    
+    <p class="en">Create personalized tasks for your whole class with one command. Each student gets work adapted to their level, learning style, and strengths.</p>
+    <p class="lt">Sukurkite individualizuotas užduotis visai klasei viena komanda. Kiekvienas mokinys gauna darbą, pritaikytą jo lygiui, mokymosi stiliui ir stiprybėms.</p>
+    
+    <a href="#pricing" class="hero-cta en">Get Class Assistant — €10</a>
+    <a href="#pricing" class="hero-cta lt">Gauti Class Assistant — €10</a>
+    
+    <p class="hero-price en">One-time purchase. No subscription. You own it forever.</p>
+    <p class="hero-price lt">Vienkartinis mokėjimas. Jokios prenumeratos. Jūsų amžinai.</p>
+</section>
+
+<!-- DEMO -->
+<div class="demo">
+    <div><span class="teacher">👩‍🏫 Teacher:</span> "Create a math quiz for the class"</div>
+    <br>
+    <div><span class="arrow">→</span> <span class="name">Jonas</span> <span class="student">(strong at math): Gets challenging problems with bonus questions</span></div>
+    <div><span class="arrow">→</span> <span class="name">Ona</span> <span class="student">(visual learner): Gets problems with diagrams and illustrations</span></div>
+    <div><span class="arrow">→</span> <span class="name">Petras</span> <span class="student">(needs practice): Gets guided examples with step-by-step hints</span></div>
+    <div><span class="arrow">→</span> <span class="name">Marija</span> <span class="student">(advanced): Gets extension problems and real-world applications</span></div>
+</div>
+
+<!-- FEATURES -->
+<section class="features">
+    <h2 class="en">Everything a teacher needs</h2>
+    <h2 class="lt">Viskas, ko mokytojui reikia</h2>
+    
+    <div class="feature-grid">
+        <div class="feature-card">
+            <div class="feature-icon">🎯</div>
+            <h3 class="en">Personalized Tasks</h3>
+            <h3 class="lt">Individualizuotos užduotys</h3>
+            <p class="en">One command creates a unique task for every student, automatically adapted to their ability level and learning style.</p>
+            <p class="lt">Viena komanda sukuria unikalią užduotį kiekvienam mokiniui, automatiškai pritaikytą jo gebėjimų lygiui ir mokymosi stiliui.</p>
+        </div>
+        <div class="feature-card">
+            <div class="feature-icon">📈</div>
+            <h3 class="en">Learns Over Time</h3>
+            <h3 class="lt">Mokosi laikui bėgant</h3>
+            <p class="en">The more you use it, the better it knows your students. Tracks strengths, weaknesses, behavior, and progress throughout the year.</p>
+            <p class="lt">Kuo daugiau naudojate, tuo geriau pažįsta jūsų mokinius. Seka stiprybes, silpnybes, elgesį ir pažangą visus metus.</p>
+        </div>
+        <div class="feature-card">
+            <div class="feature-icon">📊</div>
+            <h3 class="en">Class Overview</h3>
+            <h3 class="lt">Klasės apžvalga</h3>
+            <p class="en">See who's improving, who needs help, and spot trends across the whole class at a glance.</p>
+            <p class="lt">Matykite kas tobulėja, kam reikia pagalbos ir pastebėkite tendencijas visoje klasėje vienu žvilgsniu.</p>
+        </div>
+        <div class="feature-card">
+            <div class="feature-icon">📝</div>
+            <h3 class="en">Lesson Planning</h3>
+            <h3 class="lt">Pamokų planavimas</h3>
+            <p class="en">Get help planning lessons with built-in differentiation. Your assistant knows what works for each student.</p>
+            <p class="lt">Gaukite pagalbą planuojant pamokas su integruota diferenciacija. Jūsų asistentas žino, kas veikia kiekvienam mokiniui.</p>
+        </div>
+        <div class="feature-card">
+            <div class="feature-icon">👨‍👩‍👧</div>
+            <h3 class="en">Parent Communication</h3>
+            <h3 class="lt">Bendravimas su tėvais</h3>
+            <p class="en">Draft emails to parents, prepare progress reports, and summarize student behavior for meetings — in seconds.</p>
+            <p class="lt">Paruoškite laiškus tėvams, pažangos ataskaitas ir elgesio santraukas susitikimams — per sekundes.</p>
+        </div>
+        <div class="feature-card">
+            <div class="feature-icon">🔒</div>
+            <h3 class="en">100% Private</h3>
+            <h3 class="lt">100% Privatu</h3>
+            <p class="en">All student data stays on YOUR computer. Never uploaded. Never shared. You own and control everything.</p>
+            <p class="lt">Visi mokinių duomenys lieka JŪSŲ kompiuteryje. Niekada neįkeliami. Niekada nebendrinami.</p>
+        </div>
+    </div>
+</section>
+
+<!-- PRIVACY -->
+<section class="privacy">
+    <h2>🔒 <span class="en">Student data never leaves your computer</span><span class="lt">Mokinių duomenys niekada nepalieka jūsų kompiuterio</span></h2>
+    <p class="en">Class Assistant runs locally on your machine. Student profiles, grades, behavior notes, and learning data are stored only on your computer. The AI cloud service only sees your questions — never the stored data. GDPR compliant by design.</p>
+    <p class="lt">Class Assistant veikia lokaliai jūsų kompiuteryje. Mokinių profiliai, pažymiai, elgesio pastabos ir mokymosi duomenys saugomi tik jūsų kompiuteryje. AI debesų paslauga mato tik jūsų klausimus — niekada nesaugomus duomenis. BDAR atitinkantis iš principo.</p>
+</section>
+
+<!-- HOW IT WORKS -->
+<section class="how-it-works">
+    <h2 class="en">Set up in 5 minutes</h2>
+    <h2 class="lt">Įdiekite per 5 minutes</h2>
+    
+    <div class="steps">
+        <div class="step">
+            <div class="step-num">1</div>
+            <div>
+                <h3 class="en">Download & run installer</h3>
+                <h3 class="lt">Atsisiųskite ir paleiskite</h3>
+                <p class="en">Double-click the installer. Works on Windows, Mac, and Linux.</p>
+                <p class="lt">Du kartus spustelėkite diegimo failą. Veikia Windows, Mac ir Linux.</p>
+            </div>
+        </div>
+        <div class="step">
+            <div class="step-num">2</div>
+            <div>
+                <h3 class="en">Enter your AI key</h3>
+                <h3 class="lt">Įveskite AI raktą</h3>
+                <p class="en">Paste your Claude ($20/mo) or ChatGPT ($20/mo) key. This powers the AI brain.</p>
+                <p class="lt">Įklijuokite savo Claude ($20/mėn) arba ChatGPT ($20/mėn) raktą.</p>
+            </div>
+        </div>
+        <div class="step">
+            <div class="step-num">3</div>
+            <div>
+                <h3 class="en">Type your students' names</h3>
+                <h3 class="lt">Įveskite mokinių vardus</h3>
+                <p class="en">Paste all names at once. The system creates a personal AI agent for each student.</p>
+                <p class="lt">Įklijuokite visus vardus iš karto. Sistema sukuria asmeninį AI agentą kiekvienam mokiniui.</p>
+            </div>
+        </div>
+        <div class="step">
+            <div class="step-num">4</div>
+            <div>
+                <h3 class="en">Start teaching with AI!</h3>
+                <h3 class="lt">Pradėkite mokyti su AI!</h3>
+                <p class="en">Browser opens automatically. Ask your assistant to create a task — and watch the magic happen.</p>
+                <p class="lt">Naršyklė atsidaro automatiškai. Paprašykite asistento sukurti užduotį — ir stebėkite magiją.</p>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- PRICING -->
+<section class="pricing" id="pricing">
+    <h2 class="en">Simple pricing</h2>
+    <h2 class="lt">Paprasta kaina</h2>
+    
+    <div class="price-card">
+        <div class="price-amount">€10</div>
+        <div class="price-period en">One-time payment</div>
+        <div class="price-period lt">Vienkartinis mokėjimas</div>
+        
+        <ul class="price-features">
+            <li class="en">Teacher Assistant AI agent</li>
+            <li class="lt">Mokytojo Asistento AI agentas</li>
+            <li class="en">Unlimited student agents</li>
+            <li class="lt">Neriboti mokinių agentai</li>
+            <li class="en">Auto-personalized tasks</li>
+            <li class="lt">Automatiškai individualizuotos užduotys</li>
+            <li class="en">English & Lithuanian</li>
+            <li class="lt">Anglų ir lietuvių kalbos</li>
+            <li class="en">Windows, Mac & Linux</li>
+            <li class="lt">Windows, Mac ir Linux</li>
+            <li class="en">Discord integration</li>
+            <li class="lt">Discord integracija</li>
+            <li class="en">Auto-start on boot</li>
+            <li class="lt">Automatinis paleidimas</li>
+            <li class="en">Network file sharing</li>
+            <li class="lt">Tinklo failų bendrinimas</li>
+            <li class="en">Lifetime updates</li>
+            <li class="lt">Atnaujinimai visam laikui</li>
+        </ul>
+        
+        <!-- REPLACE THIS URL with your Lemonsqueezy checkout URL -->
+        <a href="https://classassistant.lemonsqueezy.com/checkout/buy/YOUR_VARIANT_ID" class="price-cta en">Buy Now — €10</a>
+        <a href="https://classassistant.lemonsqueezy.com/checkout/buy/YOUR_VARIANT_ID" class="price-cta lt">Pirkti dabar — €10</a>
+        
+        <p class="price-note en">⚡ Also requires Claude ($20/mo) or ChatGPT ($20/mo) subscription for AI processing</p>
+        <p class="price-note lt">⚡ Taip pat reikia Claude ($20/mėn) arba ChatGPT ($20/mėn) prenumeratos AI apdorojimui</p>
+    </div>
+</section>
+
+<!-- FAQ -->
+<section class="faq">
+    <h2 class="en">Frequently Asked Questions</h2>
+    <h2 class="lt">Dažnai užduodami klausimai</h2>
+    
+    <div class="faq-item">
+        <h3 class="en" onclick="this.nextElementSibling.style.display=this.nextElementSibling.style.display==='none'?'block':'none'">❓ Is student data safe?</h3>
+        <h3 class="lt" onclick="this.nextElementSibling.style.display=this.nextElementSibling.style.display==='none'?'block':'none'">❓ Ar mokinių duomenys saugūs?</h3>
+        <p class="en">Yes. All student data (profiles, grades, behavior notes) is stored ONLY on your computer. It never leaves your machine. The AI cloud only processes your questions — it never sees the stored student profiles. GDPR compliant.</p>
+        <p class="lt">Taip. Visi mokinių duomenys (profiliai, pažymiai, elgesio pastabos) saugomi TIK jūsų kompiuteryje. Jie niekada nepalieka jūsų kompiuterio. AI debesis apdoroja tik jūsų klausimus — niekada nemato saugomų profilių. Atitinka BDAR.</p>
+    </div>
+    
+    <div class="faq-item">
+        <h3 class="en" onclick="this.nextElementSibling.style.display=this.nextElementSibling.style.display==='none'?'block':'none'">❓ Why do I need a Claude/ChatGPT subscription?</h3>
+        <h3 class="lt" onclick="this.nextElementSibling.style.display=this.nextElementSibling.style.display==='none'?'block':'none'">❓ Kodėl reikia Claude/ChatGPT prenumeratos?</h3>
+        <p class="en">Class Assistant is the software that runs on your computer. But it needs an AI "brain" to generate responses. That brain runs in the cloud (Claude or ChatGPT). You pay the AI provider directly — we don't touch that subscription.</p>
+        <p class="lt">Class Assistant yra programinė įranga, kuri veikia jūsų kompiuteryje. Bet jai reikia AI „smegenų" atsakymams generuoti. Tos smegenys veikia debesyje (Claude arba ChatGPT). Jūs mokate AI tiekėjui tiesiogiai.</p>
+    </div>
+    
+    <div class="faq-item">
+        <h3 class="en" onclick="this.nextElementSibling.style.display=this.nextElementSibling.style.display==='none'?'block':'none'">❓ How many students can I add?</h3>
+        <h3 class="lt" onclick="this.nextElementSibling.style.display=this.nextElementSibling.style.display==='none'?'block':'none'">❓ Kiek mokinių galiu pridėti?</h3>
+        <p class="en">Unlimited! Whether you have 5 or 50 students, the system creates a personal agent for each one. Type all names during setup and you're done.</p>
+        <p class="lt">Neribotai! Nesvarbu ar turite 5 ar 50 mokinių, sistema sukuria asmeninį agentą kiekvienam. Įveskite visus vardus diegimo metu ir viskas.</p>
+    </div>
+    
+    <div class="faq-item">
+        <h3 class="en" onclick="this.nextElementSibling.style.display=this.nextElementSibling.style.display==='none'?'block':'none'">❓ Does it work in Lithuanian?</h3>
+        <h3 class="lt" onclick="this.nextElementSibling.style.display=this.nextElementSibling.style.display==='none'?'block':'none'">❓ Ar veikia lietuvių kalba?</h3>
+        <p class="en">Yes! Choose Lithuanian during installation and the entire experience — tasks, responses, everything — will be in Lithuanian.</p>
+        <p class="lt">Taip! Pasirinkite lietuvių kalbą diegimo metu ir visa patirtis — užduotys, atsakymai, viskas — bus lietuvių kalba.</p>
+    </div>
+    
+    <div class="faq-item">
+        <h3 class="en" onclick="this.nextElementSibling.style.display=this.nextElementSibling.style.display==='none'?'block':'none'">❓ What if I'm not technical?</h3>
+        <h3 class="lt" onclick="this.nextElementSibling.style.display=this.nextElementSibling.style.display==='none'?'block':'none'">❓ O jei nesu techniškas žmogus?</h3>
+        <p class="en">The installer is designed for non-technical users. Double-click, follow the prompts, done. No coding or command line knowledge needed. If you can use email, you can use Class Assistant.</p>
+        <p class="lt">Diegimo programa sukurta netechniškiems vartotojams. Du kartus spustelėkite, sekite nurodymus, baigta. Nereikia programavimo ar komandinės eilutės žinių. Jei mokate naudotis el. paštu, galite naudoti Class Assistant.</p>
+    </div>
+</section>
+
+<footer>
+    <p>🎓 Class Assistant — Made with ❤️ for teachers / Sukurta su ❤️ mokytojams</p>
+    <p style="margin-top:0.5rem">© 2026 Baffless. All rights reserved.</p>
+</footer>
+
+<script>
+function setLang(lang, btn) {
+    // Show/hide elements
+    var enEls = document.querySelectorAll('.en');
+    var ltEls = document.querySelectorAll('.lt');
+    for (var i = 0; i < enEls.length; i++) {
+        enEls[i].style.display = (lang === 'en') ? '' : 'none';
+    }
+    for (var i = 0; i < ltEls.length; i++) {
+        ltEls[i].style.display = (lang === 'lt') ? '' : 'none';
+    }
+    // Update buttons
+    var btns = document.querySelectorAll('.lang-btn');
+    for (var i = 0; i < btns.length; i++) {
+        btns[i].classList.remove('active');
+    }
+    if (btn) btn.classList.add('active');
+}
+// Init: show English
+setLang('en', document.querySelector('.lang-btn'));
+</script>
+
+</body>
+</html>
